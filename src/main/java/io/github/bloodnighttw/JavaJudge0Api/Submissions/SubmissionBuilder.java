@@ -1,6 +1,7 @@
 package io.github.bloodnighttw.JavaJudge0Api.Submissions;
 
 import com.google.gson.Gson;
+import io.github.bloodnighttw.JavaJudge0Api.Error.LanguageIdNotExistExpection;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -10,6 +11,7 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 public class SubmissionBuilder {
 
@@ -52,81 +54,97 @@ public class SubmissionBuilder {
 
     public SubmissionBuilder(String source_code, int language_id) {
 
-        this.source_code = source_code;
+
+
+        this.source_code = URLEncoder.encode(source_code);
         this.language_id = language_id;
     }
 
-    public void setCompiler_options(String compiler_options) {
+    public SubmissionBuilder setCompiler_options(String compiler_options) {
         args=args+"&compiler_options="+compiler_options;
         this.compiler_options = compiler_options;
+        return this;
     }
 
-    public void setCommand_line_arguments(String command_line_arguments) {
+    public SubmissionBuilder setCommand_line_arguments(String command_line_arguments) {
         args=args+"&command_line_arguments="+command_line_arguments;
         this.command_line_arguments = command_line_arguments;
+        return this;
     }
 
-    public void setCpu_extra_time(float cpu_extra_time) {
+    public SubmissionBuilder setCpu_extra_time(float cpu_extra_time) {
         args=args+"&cpu_extra_time="+cpu_extra_time;
         this.cpu_extra_time = cpu_extra_time;
+        return this;
     }
 
-    public void setCpu_time_limit(float cpu_time_limit) {
+    public SubmissionBuilder setCpu_time_limit(float cpu_time_limit) {
         args=args+"&cpu_time_limit="+cpu_time_limit;
         this.cpu_time_limit = cpu_time_limit;
+        return this;
     }
 
-    public void setEnable_per_process_and_thread_memory_limit(boolean enable_per_process_and_thread_memory_limit) {
+    public SubmissionBuilder setEnable_per_process_and_thread_memory_limit(boolean enable_per_process_and_thread_memory_limit) {
         args=args+"&enable_per_process_and_thread_memory_limit="+enable_per_process_and_thread_memory_limit;
         this.enable_per_process_and_thread_memory_limit = enable_per_process_and_thread_memory_limit;
+        return this;
     }
 
-    public void setEnable_per_process_and_thread_time_limit(boolean enable_per_process_and_thread_time_limit) {
+    public SubmissionBuilder setEnable_per_process_and_thread_time_limit(boolean enable_per_process_and_thread_time_limit) {
         args=args+"&enable_per_process_and_thread_time_limit="+enable_per_process_and_thread_time_limit;
         this.enable_per_process_and_thread_time_limit = enable_per_process_and_thread_time_limit;
+        return this;
     }
 
-    public void setExpected_output(String expected_output) {
+    public SubmissionBuilder setExpected_output(String expected_output) {
         args=args+"&expected_output="+expected_output;
         this.expected_output = expected_output;
+        return this;
     }
 
-    public void setMax_file_size(int max_file_size) {
+    public SubmissionBuilder setMax_file_size(int max_file_size) {
         args=args+"&max_file_size="+max_file_size;
         this.max_file_size = max_file_size;
+        return this;
     }
 
-    public void setMax_processes_and_or_threads(int max_processes_and_or_threads) {
+    public SubmissionBuilder setMax_processes_and_or_threads(int max_processes_and_or_threads) {
         args=args+"&max_processes_and_or_threads="+max_processes_and_or_threads;
         this.max_processes_and_or_threads = max_processes_and_or_threads;
+        return this;
     }
 
-    public void setMemory_limit(float memory_limit) {
+    public SubmissionBuilder setMemory_limit(float memory_limit) {
         args=args+"&memory_limit="+memory_limit;
         this.memory_limit = memory_limit;
+        return this;
     }
 
-    public void setNumber_of_runs(int number_of_runs) {
+    public SubmissionBuilder setNumber_of_runs(int number_of_runs) {
         args=args+"&number_of_runs="+number_of_runs;
         this.number_of_runs = number_of_runs;
+        return this;
     }
 
-    public void setStack_limit(int stack_limit) {
+    public SubmissionBuilder setStack_limit(int stack_limit) {
         args=args+"&stack_limit="+stack_limit;
         this.stack_limit = stack_limit;
+        return this;
     }
 
-    public void setStdin(String stdin) {
+    public SubmissionBuilder setStdin(String stdin) {
         args=args+"&stdin="+stdin;
         this.stdin = stdin;
+        return this;
     }
 
-    public void setWall_time_limit(float wall_time_limit) {
+    public SubmissionBuilder setWall_time_limit(float wall_time_limit) {
         args=args+"&wall_time_limit="+wall_time_limit;
         this.wall_time_limit = wall_time_limit;
+        return this;
     }
 
-    public DefaultSubmission build() throws IOException {
+    public DefaultSubmission build() throws IOException, LanguageIdNotExistExpection {
 
         HttpClient httpClient=new DefaultHttpClient();
 
@@ -139,6 +157,9 @@ public class SubmissionBuilder {
         request.setHeader("Content","application/json");
         HttpResponse httpResponse=httpClient.execute(request);
         String json= EntityUtils.toString(httpResponse.getEntity());
+
+        if(json.contains("language_id"))
+            throw new LanguageIdNotExistExpection(language_id,serverUrl);
 
         Gson gson=new Gson();
         token t=gson.fromJson(json,token.class);

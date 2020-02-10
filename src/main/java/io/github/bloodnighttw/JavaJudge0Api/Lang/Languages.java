@@ -1,6 +1,7 @@
 package io.github.bloodnighttw.JavaJudge0Api.Lang;
 
 import com.google.gson.Gson;
+import io.github.bloodnighttw.JavaJudge0Api.Error.LanguageIdNotExistExpection;
 import io.github.bloodnighttw.JavaJudge0Api.Submissions.DefaultSubmission;
 import io.github.bloodnighttw.JavaJudge0Api.Submissions.SubmissionBuilder;
 import org.apache.http.HttpResponse;
@@ -13,16 +14,16 @@ import java.io.IOException;
 
 public class Languages {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, LanguageIdNotExistExpection {
 
         System.out.println(Languages.getSupportLangs("http://localhost:3000"));
 
         for(Language language:Languages.getSupportLangs("http://localhost:3000"))
             System.out.println(language.getId()+" "+language.getName());
 
-        SubmissionBuilder submissionBuilder=new SubmissionBuilder("prit%20%22sssssss%22",70);
+        SubmissionBuilder submissionBuilder=new SubmissionBuilder("print(\" abcdefghijklmnopqrstuvwxyz \")\nprint(\" ABCDEFGHIJKLMNOPQRSTUVWXYZ \" )",71);
 
-        DefaultSubmission defaultSubmission=submissionBuilder.build();
+        DefaultSubmission defaultSubmission=submissionBuilder.setStdin("sssss").build();
 
         System.out.println(defaultSubmission.getToken());
 
