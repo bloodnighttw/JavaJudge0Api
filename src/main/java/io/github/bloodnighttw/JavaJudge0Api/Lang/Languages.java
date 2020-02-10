@@ -14,21 +14,6 @@ import java.io.IOException;
 
 public class Languages {
 
-    public static void main(String[] args) throws IOException, LanguageIdNotExistExpection {
-
-        System.out.println(Languages.getSupportLangs("http://localhost:3000"));
-
-        for(Language language:Languages.getSupportLangs("http://localhost:3000"))
-            System.out.println(language.getId()+" "+language.getName());
-
-        SubmissionBuilder submissionBuilder=new SubmissionBuilder("print(\" abcdefghijklmnopqrstuvwxyz \")\nprint(\" ABCDEFGHIJKLMNOPQRSTUVWXYZ \" )",71);
-
-        DefaultSubmission defaultSubmission=submissionBuilder.setStdin("sssss").build();
-
-        System.out.println(defaultSubmission.getToken());
-
-    }
-
     private static Languages instance;
     private Language[] langs;
 

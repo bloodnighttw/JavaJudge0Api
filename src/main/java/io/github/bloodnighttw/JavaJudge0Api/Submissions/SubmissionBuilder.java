@@ -40,16 +40,19 @@ public class SubmissionBuilder {
 
     private String args="";
 
-    public void setServerUrl(String serverUrl) {
+    public SubmissionBuilder setServerUrl(String serverUrl) {
         this.serverUrl = serverUrl;
+        return this;
     }
 
-    public void setBase64_encoded(boolean base64_encoded) {
+    public SubmissionBuilder setBase64_encoded(boolean base64_encoded) {
         this.base64_encoded = base64_encoded;
+        return this;
     }
 
-    public void setWait(boolean wait) {
+    public SubmissionBuilder setWait(boolean wait) {
         this.wait = wait;
+        return this;
     }
 
     public SubmissionBuilder(String source_code, int language_id) {
